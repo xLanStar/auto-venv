@@ -82,7 +82,7 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
     end
 
 
-    if test -n "$venv_dir" -a "$VIRTUAL_ENV" != "$venv_dir" -a -e "$venv_dir/bin/activate.fish"
+    if test -n "$venv_dir" -a "$VIRTUAL_ENV" != "$venv_dir"
         # Activate venv if it was found and not activated before
         __safe_activate_venv "$venv_dir/bin/activate.fish"
     else if test -n "$VIRTUAL_ENV" -a -z "$venv_dir"
@@ -92,7 +92,7 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
 
         # Try to deactivate safely
         if functions -q deactivate
-            functions -q deactivate; and deactivate
+            deactivate
             # Restore PATH if it was unset
             if test -z "$PATH"
                 set -gx PATH $old_path
