@@ -12,29 +12,6 @@
 # Global flag to track if we're in the middle of handling venv
 set -g __VENV_HANDLING 0
 
-function __safe_activate_venv
-    # Save current state
-    set -l old_path $PATH
-    set -l old_pythonhome $PYTHONHOME
-
-    # Read the activate.fish content and extract key parts
-    set -l activate_script (cat $argv[1])
-
-    # Set up the environment without sourcing activate.fish
-    set -gx VIRTUAL_ENV (dirname (dirname $argv[1]))
-    set -gx _OLD_VIRTUAL_PATH $PATH
-    set -gx PATH "$VIRTUAL_ENV/bin" $PATH
-
-    # Handle PYTHONHOME
-    if set -q PYTHONHOME
-        set -gx _OLD_VIRTUAL_PYTHONHOME $PYTHONHOME
-        set -e PYTHONHOME
-    end
-
-    # Set prompt
-    set -gx VIRTUAL_ENV_PROMPT (basename "$VIRTUAL_ENV")
-end
-
 function __handle_virtualenv_inheritance --on-event fish_prompt
     # Only run in new shells that have inherited VIRTUAL_ENV
     if test -n "$VIRTUAL_ENV" -a -z "$__VENV_INITIALIZED" -a "$__VENV_HANDLING" -eq 0
@@ -84,7 +61,7 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
 
     if test -n "$venv_dir" -a "$VIRTUAL_ENV" != "$venv_dir"
         # Activate venv if it was found and not activated before
-        __safe_activate_venv "$venv_dir/bin/activate.fish"
+        . "$venv_dir/bin/activate.fish"
     else if test -n "$VIRTUAL_ENV" -a -z "$venv_dir"
         # Deactivate venv if it is activated but we're no longer in a directory with a venv
         # Save PATH before deactivation
