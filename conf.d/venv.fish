@@ -73,9 +73,8 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
     end
 
     # Find a virtual environment in the directory
-    set -l VENV_DIR_NAMES env .env venv .venv
     set -l venv_dir ""
-    for name in $VENV_DIR_NAMES
+    for name in .venv venv .env env
         if test -e "$dir/$name/bin/activate.fish"
             set venv_dir "$dir/$name"
             break
