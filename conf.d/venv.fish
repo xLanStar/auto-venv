@@ -9,7 +9,7 @@ if status is-interactive
                 return
             end
         end
-        if [ -n "$VIRTUAL_ENV" ]
+        if [ -n "$VIRTUAL_ENV" ] && functions -q deactivate
             deactivate
         end
     end
